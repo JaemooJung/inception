@@ -1,0 +1,62 @@
+version: '3'
+
+services:
+  mariadb:
+    container_name: mariadb
+    build: ./requirements/mariadb/
+    image: mariadb
+    restart: always
+    volumes:
+      - db_volume:/var/lib/mysql/
+    env_file:
+      - .env
+    networks:
+      - inception_network
+    expose:
+      - "3306"
+
+  wordpress:
+    container_name: wordpress
+    build: ./requirements/wordpress/
+    image: wordpress
+    restart: always
+    depends_on:
+      - mariadb
+    volumes:
+      - wp_volume:/var/www/
+    env_file:
+      - .env
+    networks:
+      - inception_network
+    expose:
+      - "9000"
+
+  nginx:
+    container_name: nginx
+    build: ./requirements/nginx/
+    image: nginx
+    depends_on :
+      - wordpress
+    restart: always
+    ports:
+      - "443:443"
+    networks:
+      - inception_network
+    volumes:
+      - wp_volume:/var/www/
+
+networks:
+  inception_network:
+
+volumes:
+  #TODO :가상머신에 올릴 때 바인드 마운트 설정.
+  wp_volume:
+    driver_opts:
+      type: none
+      o : 'bind'
+      device: '/home/jaemjung/data/wordpress'
+  db_volume:
+    driver_opts:
+      type: none
+      o : 'bind'
+      device: '/home/jaemjung/data/mariadb'

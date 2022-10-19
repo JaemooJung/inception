@@ -8,7 +8,6 @@ ifeq ($(UNAME),Darwin)	#macOS
 else					#Linux
 	DB_PATH		:= /home/jaemjung/data
 endif
-# TODO: make 시 호스트 파일에 도메인 링크 안 되어있으면 추가하기
 
 .PHONY : all clean fclean re
 

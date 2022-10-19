@@ -1,10 +1,11 @@
 #!bin/bash
 
+service mysql start;
+
 cat /var/lib/mysql/.setup 2> /dev/null
 
 if [ $? -ne 0 ]; then
 
-	service mysql start;
 
 	mysql -e "CREATE DATABASE IF NOT EXISTS $MYSQL_DATABASE";
 	mysql -e "CREATE USER IF NOT EXISTS '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD'";
@@ -18,5 +19,7 @@ if [ $? -ne 0 ]; then
 	touch /var/lib/mysql/.setup;
 
 fi
+
+mysqladmin -u$MYSQL_ROOT -p$MYSQL_ROOT_PASSWORD shutdown;
 
 exec mysqld;

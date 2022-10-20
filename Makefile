@@ -9,7 +9,7 @@ else					#Linux
 	DB_PATH		:= /home/jaemjung/data
 endif
 
-.PHONY : all clean fclean re
+.PHONY : all clean fclean re start stop restart
 
 all: $(NAME)
 
